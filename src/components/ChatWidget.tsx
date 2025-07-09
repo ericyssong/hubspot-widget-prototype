@@ -399,7 +399,7 @@ export function ChatWidget() {
                 <TabsList className="relative w-full bg-white border border-gray-200 p-2 rounded-full grid grid-cols-2 items-center h-14">
                   <TabsTrigger 
                     value="chat" 
-                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-100 data-[state=active]:to-purple-100 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   >
                     <MessageCircle className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
                     <span className="relative">
@@ -410,7 +410,7 @@ export function ChatWidget() {
                   
                   <TabsTrigger 
                     value="help" 
-                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-100 data-[state=active]:to-purple-100 data-[state=active]:text-purple-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   >
                     <BookOpen className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
                     <span>Help</span>
