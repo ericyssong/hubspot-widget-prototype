@@ -104,7 +104,7 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-1/2 transform translate-x-1/2 z-50">
         <div className="flex flex-col items-center">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-80">
+          <div className="mb-4 space-y-2 w-96">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
@@ -116,36 +116,10 @@ export function ChatWidget() {
             ))}
           </div>
 
-          {/* Main input container */}
-          <div className="bg-white border border-border rounded-2xl shadow-2xl w-80 p-4">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                  <MessageCircle className="h-4 w-4 text-white" />
-                </div>
-                <span className="font-semibold">HubSpot Assistant</span>
-              </div>
-              <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setWidgetState('help')}
-                  className="h-8 w-8 p-0"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setWidgetState('minimized')}
-                  className="h-8 w-8 p-0"
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="relative">
+          {/* Minimal input container */}
+          <div className="bg-white border border-border rounded-full shadow-lg w-96 px-4 py-3 group hover:shadow-xl transition-shadow relative">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
               <Input
                 placeholder="Ask me anything..."
                 value={inputValue}
@@ -155,10 +129,17 @@ export function ChatWidget() {
                     handleSendMessage(inputValue);
                   }
                 }}
-                className="pr-10"
+                className="border-0 bg-transparent p-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                 autoFocus
               />
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setWidgetState('minimized')}
+                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
