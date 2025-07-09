@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -43,8 +42,8 @@ const mockHelpArticles: HelpArticle[] = [
 ];
 
 const promptSuggestions = [
-  "What digital marketing services do you offer?",
-  "How much does a website redesign cost?"
+  "What are your pricing plans?",
+  "How do I get started with a free trial?"
 ];
 
 export function ChatWidget() {
@@ -64,7 +63,7 @@ export function ChatWidget() {
     setTimeout(() => {
       setConversation(prev => [...prev, { 
         type: 'ai', 
-        message: `Thanks for your question about "${message}". I'm here to help! Our digital marketing agency offers comprehensive solutions for your business needs. Would you like me to provide more specific information about any particular service?`
+        message: `Thanks for your question about "${message}". I'm here to help! Our platform offers comprehensive solutions for your business needs. Would you like me to provide more specific information about any particular feature?`
       }]);
     }, 1000);
   };
@@ -85,7 +84,7 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-64"
+          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
@@ -103,24 +102,24 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-6 z-50">
         <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 transition-all duration-200 ease-in-out">
+          <div className="mb-4 space-y-2 w-80 transition-all duration-200 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => handlePromptClick(prompt)}
-                className="w-80 text-left p-3 rounded-lg bg-white/90 backdrop-blur-sm border border-border/50 hover:bg-white hover:border-border hover:shadow-md transition-all text-sm"
+                className="w-full text-left p-3 rounded-lg bg-white/90 backdrop-blur-sm border border-border/50 hover:bg-white hover:border-border hover:shadow-md transition-all text-sm"
               >
                 {prompt}
               </button>
             ))}
           </div>
 
-          {/* Input container with gradient border and width transition */}
+          {/* Minimal input container with gradient border */}
           <div className="relative">
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg px-4 py-[14px] group hover:shadow-xl transition-all duration-300 ease-in-out cursor-pointer w-80"
+              className="relative bg-white border border-border rounded-full shadow-lg w-80 px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
               onClick={() => setWidgetState('expanded')}
             >
               <div className="flex items-center gap-2">
