@@ -175,9 +175,9 @@ export function ChatWidget() {
   if (widgetState === 'tabbed') {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col overflow-hidden">
           {/* Header with close button */}
-          <div className="flex items-center justify-between p-4 border-b border-border">
+          <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
             <div className="w-6"></div> {/* Spacer for center alignment */}
             <h2 className="font-medium">Assistant</h2>
             <Button
@@ -190,8 +190,8 @@ export function ChatWidget() {
             </Button>
           </div>
 
-          <Tabs defaultValue="chat" className="flex flex-col flex-1">
-            <TabsList className="grid w-full grid-cols-2 mx-4 mt-2">
+          <Tabs defaultValue="chat" className="flex flex-col flex-1 overflow-hidden">
+            <TabsList className="grid w-full grid-cols-2 mx-4 mt-2 flex-shrink-0">
               <TabsTrigger value="chat" className="flex items-center gap-2">
                 <MessageCircle className="h-4 w-4" />
                 Chat
@@ -202,7 +202,7 @@ export function ChatWidget() {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="chat" className="flex-1 p-4 pt-2 flex flex-col">
+            <TabsContent value="chat" className="flex-1 p-4 pt-2 flex flex-col overflow-hidden">
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -238,7 +238,7 @@ export function ChatWidget() {
             </TabsContent>
 
             <TabsContent value="help" className="flex-1 p-4 pt-2 flex flex-col overflow-hidden">
-              <div className="mb-4">
+              <div className="mb-4 flex-shrink-0">
                 <div className="relative">
                   <Input
                     placeholder="Search articles"
@@ -296,9 +296,9 @@ export function ChatWidget() {
   if (widgetState === 'chat') {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-border">
+          <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -362,7 +362,7 @@ export function ChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-border p-4">
+          <div className="border-t border-border p-4 flex-shrink-0">
             <div className="relative flex items-center gap-2">
               <Input
                 placeholder="Type your message..."
