@@ -141,12 +141,12 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-80"
+          className="bg-white border border-border rounded-full shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out w-48 px-4 py-[14px]"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-primary" />
-            <span className="text-sm text-muted-foreground">Ask me anything...</span>
+            <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
+            <span className="text-sm text-muted-foreground flex-1">Ask me anything...</span>
           </div>
         </div>
       </div>
@@ -159,14 +159,15 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-6 z-50">
         <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-[462px] transition-all duration-200 ease-in-out">
+          <div className="mb-4 space-y-2 w-96 transition-all duration-300 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => handlePromptClick(prompt)}
-                className="w-full text-left p-3 rounded-lg bg-white/90 backdrop-blur-sm border border-border/50 hover:bg-white hover:border-border hover:shadow-md transition-all text-sm"
+                className="w-full text-left p-3 rounded-lg bg-white/90 backdrop-blur-sm border border-border/50 hover:bg-white hover:border-border hover:shadow-md transition-all text-sm flex items-center justify-between group"
               >
-                {prompt}
+                <span>{prompt}</span>
+                <Send className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             ))}
           </div>
@@ -176,7 +177,7 @@ export function ChatWidget() {
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg w-[462px] px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
+              className="relative bg-white border border-border rounded-full shadow-lg w-96 px-4 py-[14px] group hover:shadow-xl transition-all duration-300 ease-in-out cursor-pointer"
               onClick={handleInputClick}
             >
               <div className="flex items-center gap-2">
@@ -205,7 +206,7 @@ export function ChatWidget() {
   if (widgetState === 'tabbed') {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[600px] flex flex-col">
           {/* Header with close button */}
           <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
             <div className="w-6"></div> {/* Spacer for center alignment */}
@@ -222,7 +223,7 @@ export function ChatWidget() {
 
           <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0 relative">
             <TabsContent value="chat" className="absolute inset-0 top-0 flex flex-col data-[state=inactive]:hidden">
-              <div className="flex flex-col h-full">
+              <div className="flex-1 overflow-y-auto">
                 {/* Colored gradient section with hover expand and input */}
                 <div className="group relative bg-gradient-to-r from-blue-50 to-purple-50 border-b border-border/50 transition-all duration-300 hover:from-blue-100 hover:to-purple-100 hover:shadow-lg">
                   <div className="p-4 pt-6">
@@ -306,7 +307,7 @@ export function ChatWidget() {
                 </div>
 
                 {/* Past Chats Section */}
-                <div className="flex-1 overflow-y-auto p-4">
+                <div className="p-4">
                   <h4 className="font-medium text-sm text-muted-foreground mb-3">Recent conversations</h4>
                   <div className="space-y-2">
                     {pastChats.map((chat) => (
@@ -330,55 +331,69 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            <TabsContent value="help" className="absolute inset-0 top-0 pb-16 flex flex-col data-[state=inactive]:hidden">
-              <div className="p-4 flex-1 flex flex-col min-h-0">
-                <div className="mb-4 flex-shrink-0">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search articles"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <TabsContent value="help" className="absolute inset-0 top-0 flex flex-col data-[state=inactive]:hidden">
+              <div className="flex-1 overflow-y-auto">
+                {/* Colored gradient section similar to Chat tab */}
+                <div className="group relative bg-gradient-to-r from-purple-50 to-blue-50 border-b border-border/50 transition-all duration-300 hover:from-purple-100 hover:to-blue-100 hover:shadow-lg">
+                  <div className="p-4 pt-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900 flex items-center gap-2">
+                          Find help articles
+                          <ChevronRight className="h-4 w-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
+                        </h3>
+                      </div>
+                    </div>
+                    
+                    {/* Search field */}
+                    <div className="relative">
+                      <Input
+                        placeholder="Search articles..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 bg-white/80 backdrop-blur-sm border-white/50 focus:bg-white"
+                      />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto space-y-4 min-h-0">
+                {/* Content sections */}
+                <div className="p-4 space-y-6">
                   <div>
                     <h3 className="font-medium mb-3 text-muted-foreground">Trending Articles</h3>
-                  <div className="space-y-2">
-                    {filteredArticles.slice(0, 3).map((article) => (
-                      <div
-                        key={article.id}
-                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent cursor-pointer"
-                      >
-                        <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium truncate">{article.title}</h4>
+                    <div className="space-y-1">
+                      {filteredArticles.slice(0, 3).map((article) => (
+                        <div
+                          key={article.id}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent cursor-pointer transition-all"
+                        >
+                          <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-medium truncate">{article.title}</h4>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <h3 className="font-medium mb-3 text-muted-foreground">Browse Categories</h3>
-                  <div className="space-y-1">
-                    {categories.map((category, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-accent cursor-pointer">
-                        <span className="font-medium">{category}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-muted-foreground">
-                            {mockHelpArticles.filter(article => article.category === category).length} articles
-                          </span>
-                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <h3 className="font-medium mb-3 text-muted-foreground">Browse Categories</h3>
+                    <div className="space-y-1">
+                      {categories.map((category, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-accent cursor-pointer transition-all">
+                          <span className="font-medium text-sm">{category}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                              {mockHelpArticles.filter(article => article.category === category).length} articles
+                            </span>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </TabsContent>
 
@@ -388,12 +403,10 @@ export function ChatWidget() {
                 {/* Subtle background glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 blur-xl pointer-events-none" />
                 
-                <TabsList className="relative w-full bg-gray-100/80 backdrop-blur-sm p-1.5 rounded-full shadow-inner grid grid-cols-2">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-sm" />
-                  
+                <TabsList className="relative w-full bg-white border border-gray-200 p-2 rounded-full grid grid-cols-2 items-center h-14">
                   <TabsTrigger 
                     value="chat" 
-                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/10 data-[state=inactive]:text-gray-500 hover:text-gray-900"
+                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   >
                     <MessageCircle className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
                     <span className="relative">
@@ -404,15 +417,12 @@ export function ChatWidget() {
                   
                   <TabsTrigger 
                     value="help" 
-                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/10 data-[state=inactive]:text-gray-500 hover:text-gray-900"
+                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   >
                     <BookOpen className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
                     <span>Help</span>
                   </TabsTrigger>
                 </TabsList>
-                
-                {/* Animated indicator line */}
-                <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-60" />
               </div>
             </div>
           </Tabs>
@@ -425,7 +435,7 @@ export function ChatWidget() {
   if (widgetState === 'chat') {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col overflow-hidden">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[600px] flex flex-col overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -527,7 +537,7 @@ export function ChatWidget() {
   if (widgetState === 'expanded') {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[600px] flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center gap-2">
