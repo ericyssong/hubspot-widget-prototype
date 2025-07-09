@@ -175,7 +175,7 @@ export function ChatWidget() {
   if (widgetState === 'tabbed') {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col overflow-hidden">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
           {/* Header with close button */}
           <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
             <div className="w-6"></div> {/* Spacer for center alignment */}
@@ -190,7 +190,7 @@ export function ChatWidget() {
             </Button>
           </div>
 
-          <Tabs defaultValue="chat" className="flex flex-col flex-1 overflow-hidden">
+          <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
             <div className="flex justify-center px-4 mt-2 flex-shrink-0">
               <TabsList className="grid grid-cols-2 w-[90%]">
                 <TabsTrigger value="chat" className="flex items-center gap-2">
@@ -204,8 +204,8 @@ export function ChatWidget() {
               </TabsList>
             </div>
 
-            <TabsContent value="chat" className="flex-1 p-4 pt-2 flex flex-col overflow-hidden">
-              <div className="flex-1 flex items-center justify-center">
+            <TabsContent value="chat" className="flex-1 p-4 pt-2 flex flex-col min-h-0">
+              <div className="flex-1 flex items-center justify-center min-h-0">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <MessageCircle className="h-8 w-8 text-primary" />
@@ -239,7 +239,7 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            <TabsContent value="help" className="flex-1 p-4 pt-0 flex flex-col overflow-hidden">
+            <TabsContent value="help" className="flex-1 p-4 pt-2 flex flex-col min-h-0">
               <div className="mb-4 flex-shrink-0">
                 <div className="relative">
                   <Input
@@ -252,7 +252,7 @@ export function ChatWidget() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto space-y-4">
+              <div className="flex-1 overflow-y-auto space-y-4 min-h-0">
                 <div>
                   <h3 className="font-medium mb-3 text-muted-foreground">Trending Articles</h3>
                   <div className="space-y-2">
