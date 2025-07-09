@@ -53,19 +53,31 @@ const pastChats = [
     id: '1',
     title: 'Digital Marketing Strategy',
     lastMessage: 'Thanks for the detailed explanation about SEO...',
-    timestamp: '2 hours ago'
+    timestamp: '2h ago'
   },
   {
     id: '2',
     title: 'Website Design Questions',
     lastMessage: 'Could you help me understand the pricing...',
-    timestamp: 'Yesterday'
+    timestamp: '1d ago'
   },
   {
     id: '3',
     title: 'Social Media Marketing',
     lastMessage: 'What platforms would you recommend...',
-    timestamp: '3 days ago'
+    timestamp: '3d ago'
+  },
+  {
+    id: '4',
+    title: 'Content Creation Tips',
+    lastMessage: 'How often should I post on Instagram...',
+    timestamp: '5d ago'
+  },
+  {
+    id: '5',
+    title: 'Email Campaign Setup',
+    lastMessage: 'I need help with the automation workflow...',
+    timestamp: '1w ago'
   }
 ];
 
@@ -77,20 +89,23 @@ export function ChatWidget() {
   const [conversation, setConversation] = useState<Array<{type: 'user' | 'ai', message: string}>>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const generateAIResponse = (message: string) => {
+    if (message.includes('services')) {
+      return "We offer comprehensive digital marketing services including web design, SEO, social media marketing, and brand strategy. Our team helps businesses grow their online presence and reach their target audience effectively.";
+    } else if (message.includes('get started') || message.includes('digital marketing')) {
+      return "Getting started with digital marketing is easy! We begin with a free consultation to understand your business goals, then create a customized strategy that fits your budget and timeline. Would you like to schedule a consultation?";
+    } else {
+      return `Thanks for your question about "${message}". I'm here to help! Our digital marketing agency specializes in helping businesses grow online. Would you like me to provide more specific information about any particular service?`;
+    }
+  };
+
   const handleSendMessage = (message: string) => {
     setConversation(prev => [...prev, { type: 'user', message }]);
     setInputValue('');
     
     // Simulate AI response
     setTimeout(() => {
-      let aiResponse = '';
-      if (message.includes('services')) {
-        aiResponse = "We offer comprehensive digital marketing services including web design, SEO, social media marketing, and brand strategy. Our team helps businesses grow their online presence and reach their target audience effectively.";
-      } else if (message.includes('get started') || message.includes('digital marketing')) {
-        aiResponse = "Getting started with digital marketing is easy! We begin with a free consultation to understand your business goals, then create a customized strategy that fits your budget and timeline. Would you like to schedule a consultation?";
-      } else {
-        aiResponse = `Thanks for your question about "${message}". I'm here to help! Our digital marketing agency specializes in helping businesses grow online. Would you like me to provide more specific information about any particular service?`;
-      }
+      const aiResponse = generateAIResponse(message);
       setConversation(prev => [...prev, { type: 'ai', message: aiResponse }]);
     }, 1000);
   };
@@ -104,14 +119,7 @@ export function ChatWidget() {
     
     // Generate AI response for the prompt
     setTimeout(() => {
-      let aiResponse = '';
-      if (prompt.includes('services')) {
-        aiResponse = "We offer comprehensive digital marketing services including web design, SEO, social media marketing, and brand strategy. Our team helps businesses grow their online presence and reach their target audience effectively.";
-      } else if (prompt.includes('get started') || prompt.includes('digital marketing')) {
-        aiResponse = "Getting started with digital marketing is easy! We begin with a free consultation to understand your business goals, then create a customized strategy that fits your budget and timeline. Would you like to schedule a consultation?";
-      } else {
-        aiResponse = `Thanks for your question about "${prompt}". I'm here to help! Our digital marketing agency specializes in helping businesses grow online. Would you like me to provide more specific information about any particular service?`;
-      }
+      const aiResponse = generateAIResponse(prompt);
       setConversation(prev => [...prev, { type: 'ai', message: aiResponse }]);
     }, 1000);
   };
@@ -212,55 +220,109 @@ export function ChatWidget() {
             </Button>
           </div>
 
-          <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
-            <TabsContent value="chat" className="flex-1 p-4 flex flex-col min-h-0">
+          <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0 relative">
+            <TabsContent value="chat" className="absolute inset-0 top-0 flex flex-col data-[state=inactive]:hidden">
               <div className="flex flex-col h-full">
-                <div className="text-center mb-4 flex-shrink-0">
-                  <h3 className="font-medium mb-2">Got any questions? I'm happy to help.</h3>
-                  <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
-                  
-                  {/* Prompt suggestions */}
-                  <div className="space-y-2 mb-4">
-                    {promptSuggestions.map((prompt, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handlePromptClick(prompt)}
-                        className="w-full text-left p-3 rounded-lg border border-border hover:bg-accent transition-all text-sm"
+                {/* Colored gradient section with hover expand and input */}
+                <div className="group relative bg-gradient-to-r from-blue-50 to-purple-50 border-b border-border/50 transition-all duration-300 hover:from-blue-100 hover:to-purple-100 hover:shadow-lg">
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900 flex items-center gap-2">
+                          Start a new conversation
+                          <ChevronRight className="h-4 w-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
+                        </h3>
+                        {/* <p className="text-sm text-gray-600 mt-0.5 flex items-center gap-1">
+                          Type below or hover for quick prompts
+                          <span className="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">↓</span>
+                        </p> */}
+                      </div>
+                    </div>
+                    
+                    {/* Input field with send button */}
+                    <div className="relative">
+                      <Input
+                        placeholder="Ask me anything..."
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && inputValue.trim()) {
+                            const message = inputValue;
+                            setConversation([
+                              { type: 'ai', message: "Got any questions? I'm happy to help." },
+                              { type: 'user', message }
+                            ]);
+                            setInputValue('');
+                            setWidgetState('chat');
+                            setTimeout(() => {
+                              const aiResponse = generateAIResponse(message);
+                              setConversation(prev => [...prev, { type: 'ai', message: aiResponse }]);
+                            }, 1000);
+                          }
+                        }}
+                        className="pr-10 bg-white/80 backdrop-blur-sm border-white/50 focus:bg-white"
+                      />
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          if (inputValue.trim()) {
+                            const message = inputValue;
+                            setConversation([
+                              { type: 'ai', message: "Got any questions? I'm happy to help." },
+                              { type: 'user', message }
+                            ]);
+                            setInputValue('');
+                            setWidgetState('chat');
+                            setTimeout(() => {
+                              const aiResponse = generateAIResponse(message);
+                              setConversation(prev => [...prev, { type: 'ai', message: aiResponse }]);
+                            }, 1000);
+                          }
+                        }}
+                        disabled={!inputValue.trim()}
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
                       >
-                        {prompt}
-                      </button>
-                    ))}
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    {/* Expandable quick prompts on hover */}
+                    <div className="mt-3 max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 transition-all duration-300 overflow-hidden">
+                      <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">Quick prompts</p>
+                      <div className="space-y-2">
+                        {promptSuggestions.map((prompt, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handlePromptClick(prompt)}
+                            className="w-full text-left p-2.5 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition-all text-sm shadow-sm hover:shadow flex items-center justify-between group/prompt"
+                          >
+                            <span>{prompt}</span>
+                            <Send className="h-3 w-3 opacity-0 group-hover/prompt:opacity-100 transition-opacity" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  
-                  <Button 
-                    onClick={() => {
-                      setConversation([{ type: 'ai', message: "Got any questions? I'm happy to help." }]);
-                      setWidgetState('chat');
-                    }}
-                    className="w-full mb-4"
-                  >
-                    Start Chat
-                  </Button>
                 </div>
 
                 {/* Past Chats Section */}
-                <div className="flex-1 overflow-y-auto">
-                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Past Chats</h4>
+                <div className="flex-1 overflow-y-auto p-4">
+                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Recent conversations</h4>
                   <div className="space-y-2">
                     {pastChats.map((chat) => (
                       <div
                         key={chat.id}
-                        className="p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-all"
+                        className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-all group"
                         onClick={() => {
                           // Load past chat logic here
                           setWidgetState('chat');
                         }}
                       >
-                        <div className="flex items-start justify-between mb-1">
-                          <h5 className="font-medium text-sm truncate">{chat.title}</h5>
+                        <div className="flex items-center justify-between">
+                          <h5 className="font-medium text-sm truncate flex-1 group-hover:text-blue-600 transition-colors">{chat.title}</h5>
                           <span className="text-xs text-muted-foreground flex-shrink-0 ml-2">{chat.timestamp}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground truncate">{chat.lastMessage}</p>
+                        <p className="text-xs text-muted-foreground truncate mt-1">{chat.lastMessage}</p>
                       </div>
                     ))}
                   </div>
@@ -268,22 +330,23 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            <TabsContent value="help" className="flex-1 p-4 flex flex-col min-h-0">
-              <div className="mb-4 flex-shrink-0">
-                <div className="relative">
-                  <Input
-                    placeholder="Search articles"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <TabsContent value="help" className="absolute inset-0 top-0 pb-16 flex flex-col data-[state=inactive]:hidden">
+              <div className="p-4 flex-1 flex flex-col min-h-0">
+                <div className="mb-4 flex-shrink-0">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search articles"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex-1 overflow-y-auto space-y-4 min-h-0">
-                <div>
-                  <h3 className="font-medium mb-3 text-muted-foreground">Trending Articles</h3>
+                <div className="flex-1 overflow-y-auto space-y-4 min-h-0">
+                  <div>
+                    <h3 className="font-medium mb-3 text-muted-foreground">Trending Articles</h3>
                   <div className="space-y-2">
                     {filteredArticles.slice(0, 3).map((article) => (
                       <div
@@ -316,17 +379,18 @@ export function ChatWidget() {
                   </div>
                 </div>
               </div>
+              </div>
             </TabsContent>
 
             {/* Tabs moved to bottom */}
-            <div className="flex justify-center px-4 mb-2 border-t border-border pt-2 flex-shrink-0">
+            <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 mb-2 border-t border-border pt-2 bg-white">
               <TabsList className="grid grid-cols-2 w-[80%]">
                 <TabsTrigger value="chat" className="flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4" />
+                  {/* <MessageCircle className="h-4 w-4" /> */}
                   Chat
                 </TabsTrigger>
                 <TabsTrigger value="help" className="flex items-center gap-2">
-                  <BookOpen className="h-4 w-4" />
+                  {/* <BookOpen className="h-4 w-4" /> */}
                   Help
                 </TabsTrigger>
               </TabsList>
@@ -353,10 +417,10 @@ export function ChatWidget() {
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              {/* <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <MessageCircle className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-medium">Chat</span>
+              </div> */}
+              <span className="font-medium">Gigi</span>
             </div>
             <Button
               variant="ghost"
