@@ -47,6 +47,28 @@ const promptSuggestions = [
   "How can I get started with digital marketing?"
 ];
 
+// Mock past chats data
+const pastChats = [
+  {
+    id: '1',
+    title: 'Digital Marketing Strategy',
+    lastMessage: 'Thanks for the detailed explanation about SEO...',
+    timestamp: '2 hours ago'
+  },
+  {
+    id: '2',
+    title: 'Website Design Questions',
+    lastMessage: 'Could you help me understand the pricing...',
+    timestamp: 'Yesterday'
+  },
+  {
+    id: '3',
+    title: 'Social Media Marketing',
+    lastMessage: 'What platforms would you recommend...',
+    timestamp: '3 days ago'
+  }
+];
+
 export function ChatWidget() {
   const [widgetState, setWidgetState] = useState<WidgetState>('initial');
   const [helpState, setHelpState] = useState<HelpState>('catalog');
@@ -192,11 +214,8 @@ export function ChatWidget() {
 
           <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
             <TabsContent value="chat" className="flex-1 p-4 flex flex-col min-h-0">
-              <div className="flex-1 flex items-center justify-center min-h-0">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MessageCircle className="h-8 w-8 text-primary" />
-                  </div>
+              <div className="flex-1 flex flex-col min-h-0">
+                <div className="text-center mb-6">
                   <h3 className="font-medium mb-2">Got any questions? I'm happy to help.</h3>
                   <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
                   
@@ -218,10 +237,33 @@ export function ChatWidget() {
                       setConversation([{ type: 'ai', message: "Got any questions? I'm happy to help." }]);
                       setWidgetState('chat');
                     }}
-                    className="w-full"
+                    className="w-full mb-6"
                   >
                     Start Chat
                   </Button>
+                </div>
+
+                {/* Past Chats Section */}
+                <div className="flex-1 overflow-y-auto min-h-0">
+                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Past Chats</h4>
+                  <div className="space-y-2">
+                    {pastChats.map((chat) => (
+                      <div
+                        key={chat.id}
+                        className="p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-all"
+                        onClick={() => {
+                          // Load past chat logic here
+                          setWidgetState('chat');
+                        }}
+                      >
+                        <div className="flex items-start justify-between mb-1">
+                          <h5 className="font-medium text-sm truncate">{chat.title}</h5>
+                          <span className="text-xs text-muted-foreground flex-shrink-0 ml-2">{chat.timestamp}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">{chat.lastMessage}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </TabsContent>
