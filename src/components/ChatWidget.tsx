@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle, ArrowLeft } from 'lucide-react';
+import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle, ArrowLeft, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -112,7 +111,7 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-72"
+          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-80"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
@@ -130,7 +129,7 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-6 z-50">
         <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-[420px] transition-all duration-200 ease-in-out">
+          <div className="mb-4 space-y-2 w-[462px] transition-all duration-200 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
@@ -147,7 +146,7 @@ export function ChatWidget() {
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg w-[420px] px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
+              className="relative bg-white border border-border rounded-full shadow-lg w-[462px] px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
               onClick={handleInputClick}
             >
               <div className="flex items-center gap-2">
@@ -177,8 +176,22 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
-          <Tabs defaultValue="chat" className="flex flex-col h-full">
-            <TabsList className="grid w-full grid-cols-2 m-4 mb-0">
+          {/* Header with close button */}
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="w-6"></div> {/* Spacer for center alignment */}
+            <h2 className="font-medium">Assistant</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setWidgetState('initial')}
+              className="h-6 w-6 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <Tabs defaultValue="chat" className="flex flex-col flex-1">
+            <TabsList className="grid w-full grid-cols-2 mx-4 mt-2">
               <TabsTrigger value="chat" className="flex items-center gap-2">
                 <MessageCircle className="h-4 w-4" />
                 Chat
@@ -197,6 +210,20 @@ export function ChatWidget() {
                   </div>
                   <h3 className="font-medium mb-2">Got any questions? I'm happy to help.</h3>
                   <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
+                  
+                  {/* Prompt suggestions */}
+                  <div className="space-y-2 mb-4">
+                    {promptSuggestions.map((prompt, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handlePromptClick(prompt)}
+                        className="w-full text-left p-3 rounded-lg border border-border hover:bg-accent transition-all text-sm"
+                      >
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
+                  
                   <Button 
                     onClick={() => {
                       setConversation([{ type: 'ai', message: "Got any questions? I'm happy to help." }]);
@@ -259,18 +286,6 @@ export function ChatWidget() {
                 </div>
               </div>
             </TabsContent>
-
-            {/* Close button */}
-            <div className="absolute top-4 right-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setWidgetState('initial')}
-                className="h-6 w-6 p-0"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
           </Tabs>
         </div>
       </div>
@@ -348,7 +363,7 @@ export function ChatWidget() {
 
           {/* Input */}
           <div className="border-t border-border p-4">
-            <div className="relative">
+            <div className="relative flex items-center gap-2">
               <Input
                 placeholder="Type your message..."
                 value={inputValue}
@@ -358,9 +373,20 @@ export function ChatWidget() {
                     handleSendMessage(inputValue);
                   }
                 }}
-                className="pr-10"
+                className="flex-1"
               />
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (inputValue.trim()) {
+                    handleSendMessage(inputValue);
+                  }
+                }}
+                disabled={!inputValue.trim()}
+                className="h-10 w-10 p-0"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
