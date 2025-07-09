@@ -16,12 +16,12 @@ interface HelpArticle {
 }
 
 const mockHelpArticles: HelpArticle[] = [
-  {
-    id: '1',
-    title: 'Data Not Saving Correctly',
-    category: 'Troubleshooting',
-    content: 'Learn how to troubleshoot data saving issues in your application. This guide covers common causes and solutions for data persistence problems.'
-  },
+  // {
+  //   id: '1',
+  //   title: 'Data Not Saving Correctly',
+  //   category: 'Troubleshooting',
+  //   content: 'Learn how to troubleshoot data saving issues in your application. This guide covers common causes and solutions for data persistence problems.'
+  // },
   {
     id: '2',
     title: 'Customizing Your App\'s Design',
@@ -51,14 +51,14 @@ const promptSuggestions = [
 const pastChats = [
   {
     id: '1',
-    title: 'Digital Marketing Strategy',
-    lastMessage: 'Thanks for the detailed explanation about SEO...',
+    title: 'Pricing Questions',
+    lastMessage: 'Thanks for the detailed explanation about pricing. This is very helpful.',
     timestamp: '2h ago'
   },
   {
     id: '2',
     title: 'Website Design Questions',
-    lastMessage: 'Could you help me understand the pricing...',
+    lastMessage: 'Could you help me understand the website design process...',
     timestamp: '1d ago'
   },
   {
@@ -88,6 +88,7 @@ export function ChatWidget() {
   const [inputValue, setInputValue] = useState('');
   const [conversation, setConversation] = useState<Array<{type: 'user' | 'ai', message: string}>>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'chat' | 'help'>('chat');
 
   const generateAIResponse = (message: string) => {
     if (message.includes('services')) {
@@ -210,7 +211,7 @@ export function ChatWidget() {
           {/* Header with close button */}
           <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
             <div className="w-6"></div> {/* Spacer for center alignment */}
-            <h2 className="font-medium">Assistant</h2>
+            <h2 className="font-medium">{activeTab === 'chat' ? 'Chat' : 'Help'}</h2>
             <Button
               variant="ghost"
               size="sm"
@@ -221,12 +222,12 @@ export function ChatWidget() {
             </Button>
           </div>
 
-          <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
+          <Tabs defaultValue="chat" onValueChange={(value) => setActiveTab(value as 'chat' | 'help')} className="flex flex-col flex-1 min-h-0">
             <TabsContent value="chat" className="flex flex-col flex-1 min-h-0 mt-0 data-[state=inactive]:hidden">
               <div className="flex-1 overflow-y-auto">
                 {/* Colored gradient section with hover expand and input */}
                 <div className="group relative bg-gradient-to-r from-blue-50 to-purple-50 border-b border-border/50 transition-all duration-300 hover:from-blue-100 hover:to-purple-100 hover:shadow-lg">
-                  <div className="p-4">
+                  <div className="p-4 pt-6">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 flex items-center gap-2">
@@ -261,7 +262,7 @@ export function ChatWidget() {
                             }, 1000);
                           }
                         }}
-                        className="pr-10 bg-white/80 backdrop-blur-sm border-white/50 focus:bg-white"
+                        className="pr-10 bg-white/80 backdrop-blur-sm border-gray-200 focus:bg-white focus:border-gray-300"
                       />
                       <Button
                         size="sm"
@@ -308,19 +309,19 @@ export function ChatWidget() {
 
                 {/* Past Chats Section */}
                 <div className="p-4">
-                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Recent conversations</h4>
+                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Past Chats</h4>
                   <div className="space-y-2">
                     {pastChats.map((chat) => (
                       <div
                         key={chat.id}
-                        className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-all group"
+                        className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer transition-all group"
                         onClick={() => {
                           // Load past chat logic here
                           setWidgetState('chat');
                         }}
                       >
                         <div className="flex items-center justify-between">
-                          <h5 className="font-medium text-sm truncate flex-1 group-hover:text-blue-600 transition-colors">{chat.title}</h5>
+                          <h5 className="font-medium text-sm truncate flex-1 transition-colors">{chat.title}</h5>
                           <span className="text-xs text-muted-foreground flex-shrink-0 ml-2">{chat.timestamp}</span>
                         </div>
                         <p className="text-xs text-muted-foreground truncate mt-1">{chat.lastMessage}</p>
@@ -333,59 +334,51 @@ export function ChatWidget() {
 
             <TabsContent value="help" className="flex flex-col flex-1 min-h-0 mt-0 data-[state=inactive]:hidden">
               <div className="flex-1 overflow-y-auto">
-                {/* Colored gradient section similar to Chat tab */}
-                <div className="group relative bg-gradient-to-r from-purple-50 to-blue-50 border-b border-border/50 transition-all duration-300 hover:from-purple-100 hover:to-blue-100 hover:shadow-lg">
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900 flex items-center gap-2">
-                          Find help articles
-                          <ChevronRight className="h-4 w-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
-                        </h3>
-                      </div>
-                    </div>
-                    
-                    {/* Search field */}
-                    <div className="relative">
-                      <Input
-                        placeholder="Search articles..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 bg-white/80 backdrop-blur-sm border-white/50 focus:bg-white"
-                      />
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    </div>
+                {/* Search section */}
+                <div className="p-4 border-b border-border/50 bg-gray-50/50">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search help articles..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 bg-white border-gray-200 focus:border-gray-300"
+                    />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   </div>
                 </div>
 
                 {/* Content sections */}
-                <div className="p-4 space-y-6">
+                <div className="p-4 space-y-4">
                   <div>
-                    <h3 className="font-medium mb-3 text-muted-foreground">Trending Articles</h3>
-                    <div className="space-y-1">
-                      {filteredArticles.slice(0, 3).map((article) => (
+                    <h3 className="font-medium mb-3 text-sm text-muted-foreground  tracking-wide">Suggested Articles</h3>
+                    <div className="space-y-0">
+                      {filteredArticles.slice(0, 4).map((article) => (
                         <div
                           key={article.id}
-                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent cursor-pointer transition-all"
+                          className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent cursor-pointer transition-all group"
                         >
-                          {/* <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" /> */}
+                          {/* <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" /> */}
                           <div className="flex-1 min-w-0">
                             <h4 className="text-sm font-medium truncate">{article.title}</h4>
+                            <p className="text-xs text-muted-foreground mt-1">{article.category}</p>
                           </div>
+                          <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="font-medium mb-3 text-muted-foreground">Browse Categories</h3>
-                    <div className="space-y-1">
+                    <h3 className="font-medium mb-3 text-sm text-muted-foreground  tracking-wide">Browse by Category</h3>
+                    <div className="space-y-2">
                       {categories.map((category, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-accent cursor-pointer transition-all">
-                          <span className="font-medium text-sm">{category}</span>
+                        <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-accent cursor-pointer transition-all group">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm text-muted-foreground">
-                              {mockHelpArticles.filter(article => article.category === category).length} articles
+                            <span className="font-medium text-sm ">{category}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-muted-foreground">
+                              {mockHelpArticles.filter(article => article.category === category).length}
                             </span>
                             <ChevronRight className="h-4 w-4 text-muted-foreground" />
                           </div>
