@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle, ArrowLeft, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -192,20 +191,7 @@ export function ChatWidget() {
           </div>
 
           <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
-            <div className="flex justify-center px-4 mt-2 mb-2 flex-shrink-0">
-              <TabsList className="grid grid-cols-2 w-[80%]">
-                <TabsTrigger value="chat" className="flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4" />
-                  Chat
-                </TabsTrigger>
-                <TabsTrigger value="help" className="flex items-center gap-2">
-                  <BookOpen className="h-4 w-4" />
-                  Help
-                </TabsTrigger>
-              </TabsList>
-            </div>
-
-            <TabsContent value="chat" className="flex-1 p-4 pt-0 flex flex-col min-h-0">
+            <TabsContent value="chat" className="flex-1 p-4 flex flex-col min-h-0">
               <div className="flex-1 flex items-center justify-center min-h-0">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -240,7 +226,7 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            <TabsContent value="help" className="flex-1 p-4 pt-0 flex flex-col min-h-0">
+            <TabsContent value="help" className="flex-1 p-4 flex flex-col min-h-0">
               <div className="mb-4 flex-shrink-0">
                 <div className="relative">
                   <Input
@@ -289,6 +275,20 @@ export function ChatWidget() {
                 </div>
               </div>
             </TabsContent>
+
+            {/* Tabs moved to bottom */}
+            <div className="flex justify-center px-4 mb-2 border-t border-border pt-2 flex-shrink-0">
+              <TabsList className="grid grid-cols-2 w-[80%]">
+                <TabsTrigger value="chat" className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Chat
+                </TabsTrigger>
+                <TabsTrigger value="help" className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  Help
+                </TabsTrigger>
+              </TabsList>
+            </div>
           </Tabs>
         </div>
       </div>
