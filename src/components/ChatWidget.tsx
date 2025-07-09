@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,33 +17,33 @@ interface HelpArticle {
 const mockHelpArticles: HelpArticle[] = [
   {
     id: '1',
-    title: 'Getting Started with HubSpot',
+    title: 'Getting Started with Our Platform',
     category: 'Getting started',
-    content: 'Learn the basics of using HubSpot to grow your business. This comprehensive guide will walk you through setting up your account, creating your first campaigns, and understanding the core features that make HubSpot powerful.'
+    content: 'Learn the basics of using our platform to manage your business. This comprehensive guide will walk you through setting up your account, creating your first projects, and understanding the core features that make our platform powerful.'
   },
   {
     id: '2',
     title: 'Customizing Your Dashboard',
     category: 'Getting started',
-    content: 'Personalize your HubSpot dashboard to show the metrics that matter most to your business. You can add, remove, and rearrange widgets to create the perfect view of your data.'
+    content: 'Personalize your dashboard to show the metrics that matter most to your business. You can add, remove, and rearrange widgets to create the perfect view of your data.'
   },
   {
     id: '3',
-    title: 'Managing Contact Properties',
+    title: 'Managing User Access',
     category: 'Troubleshooting',
-    content: 'Learn how to create, edit, and manage contact properties in HubSpot. Contact properties help you store and organize important information about your contacts.'
+    content: 'Learn how to create, edit, and manage user permissions in our platform. User access controls help you organize your team and control who can see what information.'
   },
   {
     id: '4',
-    title: 'Email Marketing Best Practices',
+    title: 'Integration Best Practices',
     category: 'Best Practices',
-    content: 'Discover proven strategies for creating effective email campaigns that engage your audience and drive results. From subject lines to call-to-actions, we cover it all.'
+    content: 'Discover proven strategies for integrating our platform with your existing tools and workflows. From API connections to data synchronization, we cover it all.'
   }
 ];
 
 const promptSuggestions = [
-  "What are HubSpot's pricing plans?",
-  "How do I set up email marketing?"
+  "What are your pricing plans?",
+  "How do I get started with a free trial?"
 ];
 
 export function ChatWidget() {
@@ -64,7 +63,7 @@ export function ChatWidget() {
     setTimeout(() => {
       setConversation(prev => [...prev, { 
         type: 'ai', 
-        message: `Thanks for your question about "${message}". I'm here to help! HubSpot offers comprehensive solutions for your business needs. Would you like me to provide more specific information about any particular feature?`
+        message: `Thanks for your question about "${message}". I'm here to help! Our platform offers comprehensive solutions for your business needs. Would you like me to provide more specific information about any particular feature?`
       }]);
     }, 1000);
   };
@@ -85,7 +84,7 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out"
+          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
@@ -103,7 +102,7 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-6 z-50">
         <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-80 transition-all duration-300 ease-in-out">
+          <div className="mb-4 space-y-2 w-80 transition-all duration-200 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
@@ -120,7 +119,7 @@ export function ChatWidget() {
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg w-80 px-4 py-[14px] group hover:shadow-xl transition-all duration-300 ease-in-out cursor-pointer"
+              className="relative bg-white border border-border rounded-full shadow-lg w-80 px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
               onClick={() => setWidgetState('expanded')}
             >
               <div className="flex items-center gap-2">
