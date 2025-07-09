@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -85,7 +84,7 @@ export function ChatWidget() {
   // Minimized State
   if (widgetState === 'minimized') {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-1/2 transform translate-x-1/2 z-50">
         <div 
           className="bg-white border border-border rounded-full px-4 py-3 shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
           onClick={() => setWidgetState('initial')}
@@ -102,63 +101,65 @@ export function ChatWidget() {
   // Initial State
   if (widgetState === 'initial') {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
-        <div className="bg-white border border-border rounded-2xl shadow-2xl w-96 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <MessageCircle className="h-4 w-4 text-white" />
+      <div className="fixed bottom-6 right-1/2 transform translate-x-1/2 z-50">
+        <div className="flex flex-col items-center">
+          {/* Floating prompts above input */}
+          <div className="mb-4 space-y-2 w-80">
+            {promptSuggestions.map((prompt, index) => (
+              <button
+                key={index}
+                onClick={() => handlePromptClick(prompt)}
+                className="w-full text-left p-3 rounded-lg bg-white/90 backdrop-blur-sm border border-border/50 hover:bg-white hover:border-border hover:shadow-md transition-all text-sm"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+
+          {/* Main input container */}
+          <div className="bg-white border border-border rounded-2xl shadow-2xl w-80 p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                  <MessageCircle className="h-4 w-4 text-white" />
+                </div>
+                <span className="font-semibold">HubSpot Assistant</span>
               </div>
-              <span className="font-semibold">HubSpot Assistant</span>
-            </div>
-            <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setWidgetState('help')}
-                className="h-8 w-8 p-0"
-              >
-                <HelpCircle className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setWidgetState('minimized')}
-                className="h-8 w-8 p-0"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <h3 className="font-medium mb-2">How can I help you today?</h3>
-            <div className="space-y-2">
-              {promptSuggestions.map((prompt, index) => (
-                <button
-                  key={index}
-                  onClick={() => handlePromptClick(prompt)}
-                  className="w-full text-left p-3 rounded-lg border border-border hover:bg-accent hover:border-accent-foreground/20 transition-colors text-sm"
+              <div className="flex gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setWidgetState('help')}
+                  className="h-8 w-8 p-0"
                 >
-                  {prompt}
-                </button>
-              ))}
+                  <HelpCircle className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setWidgetState('minimized')}
+                  className="h-8 w-8 p-0"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <div className="relative">
-            <Input
-              placeholder="Ask me anything..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' && inputValue.trim()) {
-                  handleSendMessage(inputValue);
-                }
-              }}
-              className="pr-10"
-            />
-            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="relative">
+              <Input
+                placeholder="Ask me anything..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && inputValue.trim()) {
+                    handleSendMessage(inputValue);
+                  }
+                }}
+                className="pr-10"
+                autoFocus
+              />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
           </div>
         </div>
       </div>
