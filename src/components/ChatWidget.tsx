@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-type WidgetState = 'minimized' | 'initial' | 'expanded' | 'help';
+type WidgetState = 'minimized' | 'initial' | 'expanded' | 'help' | 'chat';
 type HelpState = 'catalog' | 'article';
 
 interface HelpArticle {
@@ -42,8 +43,8 @@ const mockHelpArticles: HelpArticle[] = [
 ];
 
 const promptSuggestions = [
-  "What are your pricing plans?",
-  "How do I get started with a free trial?"
+  "What services do you offer?",
+  "How can I get started with digital marketing?"
 ];
 
 export function ChatWidget() {
@@ -56,20 +57,38 @@ export function ChatWidget() {
 
   const handleSendMessage = (message: string) => {
     setConversation(prev => [...prev, { type: 'user', message }]);
-    setWidgetState('expanded');
     setInputValue('');
     
     // Simulate AI response
     setTimeout(() => {
-      setConversation(prev => [...prev, { 
-        type: 'ai', 
-        message: `Thanks for your question about "${message}". I'm here to help! Our platform offers comprehensive solutions for your business needs. Would you like me to provide more specific information about any particular feature?`
-      }]);
+      let aiResponse = '';
+      if (message.includes('services')) {
+        aiResponse = "We offer comprehensive digital marketing services including web design, SEO, social media marketing, and brand strategy. Our team helps businesses grow their online presence and reach their target audience effectively.";
+      } else if (message.includes('get started') || message.includes('digital marketing')) {
+        aiResponse = "Getting started with digital marketing is easy! We begin with a free consultation to understand your business goals, then create a customized strategy that fits your budget and timeline. Would you like to schedule a consultation?";
+      } else {
+        aiResponse = `Thanks for your question about "${message}". I'm here to help! Our digital marketing agency specializes in helping businesses grow online. Would you like me to provide more specific information about any particular service?`;
+      }
+      setConversation(prev => [...prev, { type: 'ai', message: aiResponse }]);
     }, 1000);
   };
 
   const handlePromptClick = (prompt: string) => {
-    handleSendMessage(prompt);
+    setConversation([
+      { type: 'ai', message: "Hello, I'm an AI assistant. How can I help?" },
+      { type: 'user', message: prompt }
+    ]);
+    setWidgetState('chat');
+    
+    // Add AI response
+    setTimeout(() => {
+      handleSendMessage(prompt);
+    }, 500);
+  };
+
+  const handleInputClick = () => {
+    setConversation([{ type: 'ai', message: "Hello, I'm an AI assistant. How can I help?" }]);
+    setWidgetState('chat');
   };
 
   const filteredArticles = mockHelpArticles.filter(article =>
@@ -84,7 +103,7 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out"
+          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-64"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
@@ -102,7 +121,7 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-6 z-50">
         <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-80 transition-all duration-200 ease-in-out">
+          <div className="mb-4 space-y-2 w-96 transition-all duration-200 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
@@ -119,8 +138,8 @@ export function ChatWidget() {
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg w-80 px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
-              onClick={() => setWidgetState('expanded')}
+              className="relative bg-white border border-border rounded-full shadow-lg w-96 px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
+              onClick={handleInputClick}
             >
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
@@ -144,21 +163,114 @@ export function ChatWidget() {
     );
   }
 
-  // Expanded State (Modal)
-  if (widgetState === 'expanded') {
+  // Chat State
+  if (widgetState === 'chat') {
     return (
-      <Dialog open={true} onOpenChange={() => setWidgetState('initial')}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <MessageCircle className="h-4 w-4 text-white" />
               </div>
-              HubSpot Assistant
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="flex-1 overflow-y-auto max-h-96 space-y-4 pr-2">
+              <span className="font-medium">Digital Marketing Assistant</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setWidgetState('initial')}
+              className="h-6 w-6 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {conversation.map((msg, index) => (
+              <div key={index} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[80%] p-3 rounded-lg ${
+                  msg.type === 'user' 
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'bg-muted'
+                }`}>
+                  {msg.type === 'ai' && (
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                        <MessageCircle className="h-3 w-3 text-white" />
+                      </div>
+                      <span className="text-sm font-medium">Assistant</span>
+                    </div>
+                  )}
+                  <p className="text-sm">{msg.message}</p>
+                </div>
+              </div>
+            ))}
+
+            {/* Show prompt suggestions at bottom if only welcome message */}
+            {conversation.length === 1 && (
+              <div className="space-y-2 pt-4">
+                {promptSuggestions.map((prompt, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handlePromptClick(prompt)}
+                    className="w-full text-left p-3 rounded-lg border border-border hover:bg-accent transition-all text-sm"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Input */}
+          <div className="border-t border-border p-4">
+            <div className="relative">
+              <Input
+                placeholder="Type your message..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && inputValue.trim()) {
+                    handleSendMessage(inputValue);
+                  }
+                }}
+                className="pr-10"
+              />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Expanded State (Widget instead of modal)
+  if (widgetState === 'expanded') {
+    return (
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <MessageCircle className="h-4 w-4 text-white" />
+              </div>
+              <span className="font-medium">Digital Marketing Assistant</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setWidgetState('initial')}
+              className="h-6 w-6 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {conversation.map((msg, index) => (
               <div key={index} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] p-3 rounded-lg ${
@@ -180,7 +292,8 @@ export function ChatWidget() {
             ))}
           </div>
 
-          <div className="border-t pt-4 mt-4">
+          {/* Input */}
+          <div className="border-t border-border p-4">
             <div className="relative">
               <Input
                 placeholder="Type your message..."
@@ -196,8 +309,8 @@ export function ChatWidget() {
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     );
   }
 
