@@ -191,16 +191,18 @@ export function ChatWidget() {
           </div>
 
           <Tabs defaultValue="chat" className="flex flex-col flex-1 overflow-hidden">
-            <TabsList className="grid w-full grid-cols-2 mx-4 mt-2 flex-shrink-0">
-              <TabsTrigger value="chat" className="flex items-center gap-2">
-                <MessageCircle className="h-4 w-4" />
-                Chat
-              </TabsTrigger>
-              <TabsTrigger value="help" className="flex items-center gap-2">
-                <BookOpen className="h-4 w-4" />
-                Help
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex justify-center px-4 mt-2 flex-shrink-0">
+              <TabsList className="grid grid-cols-2 w-[90%]">
+                <TabsTrigger value="chat" className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Chat
+                </TabsTrigger>
+                <TabsTrigger value="help" className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  Help
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="chat" className="flex-1 p-4 pt-2 flex flex-col overflow-hidden">
               <div className="flex-1 flex items-center justify-center">
@@ -237,7 +239,7 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            <TabsContent value="help" className="flex-1 p-4 pt-2 flex flex-col overflow-hidden">
+            <TabsContent value="help" className="flex-1 p-4 pt-0 flex flex-col overflow-hidden">
               <div className="mb-4 flex-shrink-0">
                 <div className="relative">
                   <Input
