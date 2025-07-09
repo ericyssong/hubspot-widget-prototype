@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -80,10 +79,18 @@ export function ChatWidget() {
     ]);
     setWidgetState('chat');
     
-    // Add AI response
+    // Generate AI response for the prompt
     setTimeout(() => {
-      handleSendMessage(prompt);
-    }, 500);
+      let aiResponse = '';
+      if (prompt.includes('services')) {
+        aiResponse = "We offer comprehensive digital marketing services including web design, SEO, social media marketing, and brand strategy. Our team helps businesses grow their online presence and reach their target audience effectively.";
+      } else if (prompt.includes('get started') || prompt.includes('digital marketing')) {
+        aiResponse = "Getting started with digital marketing is easy! We begin with a free consultation to understand your business goals, then create a customized strategy that fits your budget and timeline. Would you like to schedule a consultation?";
+      } else {
+        aiResponse = `Thanks for your question about "${prompt}". I'm here to help! Our digital marketing agency specializes in helping businesses grow online. Would you like me to provide more specific information about any particular service?`;
+      }
+      setConversation(prev => [...prev, { type: 'ai', message: aiResponse }]);
+    }, 1000);
   };
 
   const handleInputClick = () => {
