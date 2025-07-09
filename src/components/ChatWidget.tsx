@@ -1,10 +1,12 @@
+
 import React, { useState } from 'react';
-import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
+import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-type WidgetState = 'minimized' | 'initial' | 'expanded' | 'help' | 'chat';
+type WidgetState = 'minimized' | 'initial' | 'expanded' | 'help' | 'chat' | 'tabbed';
 type HelpState = 'catalog' | 'article';
 
 interface HelpArticle {
@@ -17,27 +19,27 @@ interface HelpArticle {
 const mockHelpArticles: HelpArticle[] = [
   {
     id: '1',
-    title: 'Getting Started with Our Platform',
-    category: 'Getting started',
-    content: 'Learn the basics of using our platform to manage your business. This comprehensive guide will walk you through setting up your account, creating your first projects, and understanding the core features that make our platform powerful.'
+    title: 'Data Not Saving Correctly',
+    category: 'Troubleshooting',
+    content: 'Learn how to troubleshoot data saving issues in your application. This guide covers common causes and solutions for data persistence problems.'
   },
   {
     id: '2',
-    title: 'Customizing Your Dashboard',
+    title: 'Customizing Your App\'s Design',
     category: 'Getting started',
-    content: 'Personalize your dashboard to show the metrics that matter most to your business. You can add, remove, and rearrange widgets to create the perfect view of your data.'
+    content: 'Personalize your app\'s appearance to match your brand. You can customize colors, layouts, and components to create a unique user experience.'
   },
   {
     id: '3',
-    title: 'Managing User Access',
-    category: 'Troubleshooting',
-    content: 'Learn how to create, edit, and manage user permissions in our platform. User access controls help you organize your team and control who can see what information.'
+    title: 'Creating Your First App',
+    category: 'Getting started',
+    content: 'Get started with building your first application. This comprehensive guide walks you through the initial setup and basic configuration steps.'
   },
   {
     id: '4',
     title: 'Integration Best Practices',
     category: 'Best Practices',
-    content: 'Discover proven strategies for integrating our platform with your existing tools and workflows. From API connections to data synchronization, we cover it all.'
+    content: 'Discover proven strategies for integrating with external services and APIs. From authentication to data synchronization, we cover it all.'
   }
 ];
 
@@ -74,7 +76,7 @@ export function ChatWidget() {
 
   const handlePromptClick = (prompt: string) => {
     setConversation([
-      { type: 'ai', message: "Hello, I'm an AI assistant. How can I help?" },
+      { type: 'ai', message: "Got any questions? I'm happy to help." },
       { type: 'user', message: prompt }
     ]);
     setWidgetState('chat');
@@ -94,7 +96,7 @@ export function ChatWidget() {
   };
 
   const handleInputClick = () => {
-    setConversation([{ type: 'ai', message: "Hello, I'm an AI assistant. How can I help?" }]);
+    setConversation([{ type: 'ai', message: "Got any questions? I'm happy to help." }]);
     setWidgetState('chat');
   };
 
@@ -110,7 +112,7 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-64"
+          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out w-72"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
@@ -128,7 +130,7 @@ export function ChatWidget() {
       <div className="fixed bottom-6 right-6 z-50">
         <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-96 transition-all duration-200 ease-in-out">
+          <div className="mb-4 space-y-2 w-[420px] transition-all duration-200 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
@@ -145,7 +147,7 @@ export function ChatWidget() {
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg w-96 px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
+              className="relative bg-white border border-border rounded-full shadow-lg w-[420px] px-4 py-[14px] group hover:shadow-xl transition-all duration-200 ease-in-out cursor-pointer"
               onClick={handleInputClick}
             >
               <div className="flex items-center gap-2">
@@ -170,6 +172,111 @@ export function ChatWidget() {
     );
   }
 
+  // Tabbed State
+  if (widgetState === 'tabbed') {
+    return (
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="bg-white border border-border rounded-2xl shadow-xl w-96 h-[500px] flex flex-col">
+          <Tabs defaultValue="chat" className="flex flex-col h-full">
+            <TabsList className="grid w-full grid-cols-2 m-4 mb-0">
+              <TabsTrigger value="chat" className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4" />
+                Chat
+              </TabsTrigger>
+              <TabsTrigger value="help" className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                Help
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="chat" className="flex-1 p-4 pt-2 flex flex-col">
+              <div className="flex-1 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MessageCircle className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="font-medium mb-2">Got any questions? I'm happy to help.</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
+                  <Button 
+                    onClick={() => {
+                      setConversation([{ type: 'ai', message: "Got any questions? I'm happy to help." }]);
+                      setWidgetState('chat');
+                    }}
+                    className="w-full"
+                  >
+                    Start Chat
+                  </Button>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="help" className="flex-1 p-4 pt-2 flex flex-col overflow-hidden">
+              <div className="mb-4">
+                <div className="relative">
+                  <Input
+                    placeholder="Search articles"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-4">
+                <div>
+                  <h3 className="font-medium mb-3 text-muted-foreground">Trending Articles</h3>
+                  <div className="space-y-2">
+                    {filteredArticles.slice(0, 3).map((article) => (
+                      <div
+                        key={article.id}
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent cursor-pointer"
+                      >
+                        <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-medium truncate">{article.title}</h4>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-3 text-muted-foreground">Browse Categories</h3>
+                  <div className="space-y-1">
+                    {categories.map((category, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-accent cursor-pointer">
+                        <span className="font-medium">{category}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-muted-foreground">
+                            {mockHelpArticles.filter(article => article.category === category).length} articles
+                          </span>
+                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Close button */}
+            <div className="absolute top-4 right-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setWidgetState('initial')}
+                className="h-6 w-6 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    );
+  }
+
   // Chat State
   if (widgetState === 'chat') {
     return (
@@ -178,10 +285,18 @@ export function ChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setWidgetState('tabbed')}
+                className="h-8 w-8 p-0 mr-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <MessageCircle className="h-4 w-4 text-white" />
               </div>
-              <span className="font-medium">Digital Marketing Assistant</span>
+              <span className="font-medium">Chat</span>
             </div>
             <Button
               variant="ghost"
@@ -207,7 +322,7 @@ export function ChatWidget() {
                       <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
                         <MessageCircle className="h-3 w-3 text-white" />
                       </div>
-                      <span className="text-sm font-medium">Assistant</span>
+                      <span className="text-sm font-medium">Gigi</span>
                     </div>
                   )}
                   <p className="text-sm">{msg.message}</p>
