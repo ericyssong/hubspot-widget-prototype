@@ -225,7 +225,7 @@ export function ChatWidget() {
               <div className="flex flex-col h-full">
                 {/* Colored gradient section with hover expand and input */}
                 <div className="group relative bg-gradient-to-r from-blue-50 to-purple-50 border-b border-border/50 transition-all duration-300 hover:from-blue-100 hover:to-purple-100 hover:shadow-lg">
-                  <div className="p-4">
+                  <div className="p-4 pt-6">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 flex items-center gap-2">
@@ -382,18 +382,38 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            {/* Tabs moved to bottom */}
-            <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 mb-2 border-t border-border pt-2 bg-white">
-              <TabsList className="grid grid-cols-2 w-[80%]">
-                <TabsTrigger value="chat" className="flex items-center gap-2">
-                  {/* <MessageCircle className="h-4 w-4" /> */}
-                  Chat
-                </TabsTrigger>
-                <TabsTrigger value="help" className="flex items-center gap-2">
-                  {/* <BookOpen className="h-4 w-4" /> */}
-                  Help
-                </TabsTrigger>
-              </TabsList>
+            {/* Modern bottom tabs with creative styling */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent rounded-b-2xl overflow-hidden">
+              <div className="relative px-4 pb-4 pt-2">
+                {/* Subtle background glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 blur-xl pointer-events-none" />
+                
+                <TabsList className="relative w-full bg-gray-100/80 backdrop-blur-sm p-1.5 rounded-full shadow-inner grid grid-cols-2">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-sm" />
+                  
+                  <TabsTrigger 
+                    value="chat" 
+                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/10 data-[state=inactive]:text-gray-500 hover:text-gray-900"
+                  >
+                    <MessageCircle className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
+                    <span className="relative">
+                      Chat
+                      <span className="absolute -top-1 -right-2 h-2 w-2 bg-blue-500 rounded-full animate-pulse data-[state=inactive]:opacity-0 transition-opacity" />
+                    </span>
+                  </TabsTrigger>
+                  
+                  <TabsTrigger 
+                    value="help" 
+                    className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/10 data-[state=inactive]:text-gray-500 hover:text-gray-900"
+                  >
+                    <BookOpen className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
+                    <span>Help</span>
+                  </TabsTrigger>
+                </TabsList>
+                
+                {/* Animated indicator line */}
+                <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-60" />
+              </div>
             </div>
           </Tabs>
         </div>
