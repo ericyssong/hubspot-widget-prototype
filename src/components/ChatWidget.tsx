@@ -214,8 +214,8 @@ export function ChatWidget() {
 
           <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
             <TabsContent value="chat" className="flex-1 p-4 flex flex-col min-h-0">
-              <div className="flex-1 flex flex-col min-h-0">
-                <div className="text-center mb-6">
+              <div className="flex flex-col h-full">
+                <div className="text-center mb-4 flex-shrink-0">
                   <h3 className="font-medium mb-2">Got any questions? I'm happy to help.</h3>
                   <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
                   
@@ -237,14 +237,14 @@ export function ChatWidget() {
                       setConversation([{ type: 'ai', message: "Got any questions? I'm happy to help." }]);
                       setWidgetState('chat');
                     }}
-                    className="w-full mb-6"
+                    className="w-full mb-4"
                   >
                     Start Chat
                   </Button>
                 </div>
 
                 {/* Past Chats Section */}
-                <div className="flex-1 overflow-y-auto min-h-0">
+                <div className="flex-1 overflow-y-auto">
                   <h4 className="font-medium text-sm text-muted-foreground mb-3">Past Chats</h4>
                   <div className="space-y-2">
                     {pastChats.map((chat) => (
