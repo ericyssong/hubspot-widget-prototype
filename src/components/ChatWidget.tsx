@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -43,9 +44,7 @@ const mockHelpArticles: HelpArticle[] = [
 
 const promptSuggestions = [
   "What are HubSpot's pricing plans?",
-  "How do I set up email marketing?",
-  "Tell me about CRM features",
-  "What integrations are available?"
+  "How do I set up email marketing?"
 ];
 
 export function ChatWidget() {
@@ -84,9 +83,9 @@ export function ChatWidget() {
   // Minimized State
   if (widgetState === 'minimized') {
     return (
-      <div className="fixed bottom-6 right-1/2 transform translate-x-1/2 z-50">
+      <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full px-4 py-3 shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+          className="bg-white border border-border rounded-full px-4 py-[14px] shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out"
           onClick={() => setWidgetState('initial')}
         >
           <div className="flex items-center gap-2">
@@ -101,10 +100,10 @@ export function ChatWidget() {
   // Initial State
   if (widgetState === 'initial') {
     return (
-      <div className="fixed bottom-6 right-1/2 transform translate-x-1/2 z-50">
-        <div className="flex flex-col items-center">
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="flex flex-col items-end">
           {/* Floating prompts above input */}
-          <div className="mb-4 space-y-2 w-96">
+          <div className="mb-4 space-y-2 w-80 transition-all duration-300 ease-in-out">
             {promptSuggestions.map((prompt, index) => (
               <button
                 key={index}
@@ -116,30 +115,29 @@ export function ChatWidget() {
             ))}
           </div>
 
-          {/* Minimal input container */}
-          <div className="bg-white border border-border rounded-full shadow-lg w-96 px-4 py-3 group hover:shadow-xl transition-shadow relative">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
-              <Input
-                placeholder="Ask me anything..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter' && inputValue.trim()) {
-                    handleSendMessage(inputValue);
-                  }
-                }}
-                className="border-0 bg-transparent p-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
-                autoFocus
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setWidgetState('minimized')}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
+          {/* Minimal input container with gradient border */}
+          <div className="relative">
+            {/* Gradient border background */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
+            <div 
+              className="relative bg-white border border-border rounded-full shadow-lg w-80 px-4 py-[14px] group hover:shadow-xl transition-all duration-300 ease-in-out cursor-pointer"
+              onClick={() => setWidgetState('expanded')}
+            >
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                <span className="text-sm text-muted-foreground flex-1">Ask me anything...</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setWidgetState('minimized');
+                  }}
+                  className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
