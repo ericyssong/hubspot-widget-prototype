@@ -1,10 +1,12 @@
 
 
 import { ChatWidget } from "@/components/ChatWidget";
+import { Navbar } from "@/components/Navbar";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-slate-100">
+      <Navbar />
       {/* Hero Section */}
       <div className="container mx-auto px-6 py-16">
         <div className="text-center max-w-4xl mx-auto">

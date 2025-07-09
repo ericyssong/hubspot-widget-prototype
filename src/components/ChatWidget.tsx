@@ -221,12 +221,12 @@ export function ChatWidget() {
             </Button>
           </div>
 
-          <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0 relative">
-            <TabsContent value="chat" className="absolute inset-0 top-0 flex flex-col data-[state=inactive]:hidden">
+          <Tabs defaultValue="chat" className="flex flex-col flex-1 min-h-0">
+            <TabsContent value="chat" className="flex flex-col flex-1 min-h-0 mt-0 data-[state=inactive]:hidden">
               <div className="flex-1 overflow-y-auto">
                 {/* Colored gradient section with hover expand and input */}
                 <div className="group relative bg-gradient-to-r from-blue-50 to-purple-50 border-b border-border/50 transition-all duration-300 hover:from-blue-100 hover:to-purple-100 hover:shadow-lg">
-                  <div className="p-4 pt-6">
+                  <div className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 flex items-center gap-2">
@@ -331,11 +331,11 @@ export function ChatWidget() {
               </div>
             </TabsContent>
 
-            <TabsContent value="help" className="absolute inset-0 top-0 flex flex-col data-[state=inactive]:hidden">
+            <TabsContent value="help" className="flex flex-col flex-1 min-h-0 mt-0 data-[state=inactive]:hidden">
               <div className="flex-1 overflow-y-auto">
                 {/* Colored gradient section similar to Chat tab */}
                 <div className="group relative bg-gradient-to-r from-purple-50 to-blue-50 border-b border-border/50 transition-all duration-300 hover:from-purple-100 hover:to-blue-100 hover:shadow-lg">
-                  <div className="p-4 pt-6">
+                  <div className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 flex items-center gap-2">
@@ -368,7 +368,7 @@ export function ChatWidget() {
                           key={article.id}
                           className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent cursor-pointer transition-all"
                         >
-                          <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          {/* <BookOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" /> */}
                           <div className="flex-1 min-w-0">
                             <h4 className="text-sm font-medium truncate">{article.title}</h4>
                           </div>
