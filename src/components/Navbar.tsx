@@ -14,7 +14,7 @@ export function Navbar() {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
               {/* <span className="text-white font-bold text-sm">DM</span> */}
             </div>
-            <span className="text-xl font-bold text-foreground">Digi</span>
+            <span className="text-xl font-bold text-foreground">Digi Labs</span>
           </div>
 
           {/* Desktop Navigation */}

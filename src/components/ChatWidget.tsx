@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCircle, Minus, X, Search, ChevronRight, BookOpen, HelpCircle, ArrowLeft, Send } from 'lucide-react';
+import { Minimize2, X, Search, ChevronRight, BookOpen, HelpCircle, ArrowLeft, Send, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -7,6 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type WidgetState = 'minimized' | 'initial' | 'expanded' | 'help' | 'chat' | 'tabbed';
 type HelpState = 'catalog' | 'article';
+
+// Shared styling constants for consistency
+const INPUT_CONTAINER_HEIGHT = 'py-[14px]';
+const INPUT_CONTAINER_BASE_CLASSES = 'bg-white border border-border rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out cursor-pointer';
+const INPUT_CONTAINER_CONTENT_CLASSES = 'flex items-center gap-2';
+const INPUT_ICON_CLASSES = 'h-5 w-5 text-primary flex-shrink-0';
+const INPUT_TEXT_CLASSES = 'text-sm text-muted-foreground flex-1';
 
 interface HelpArticle {
   id: string;
@@ -142,12 +149,12 @@ export function ChatWidget() {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <div 
-          className="bg-white border border-border rounded-full shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out w-48 px-4 py-[14px]"
+          className={`${INPUT_CONTAINER_BASE_CLASSES} w-48 px-4 ${INPUT_CONTAINER_HEIGHT}`}
           onClick={() => setWidgetState('initial')}
         >
-          <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
-            <span className="text-sm text-muted-foreground flex-1">Ask me anything...</span>
+          <div className={INPUT_CONTAINER_CONTENT_CLASSES}>
+            <img src="/breeze.png" alt="" className={INPUT_ICON_CLASSES} />
+            <span className={INPUT_TEXT_CLASSES}>Ask me anything...</span>
           </div>
         </div>
       </div>
@@ -178,12 +185,12 @@ export function ChatWidget() {
             {/* Gradient border background */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm"></div>
             <div 
-              className="relative bg-white border border-border rounded-full shadow-lg w-96 px-4 py-[14px] group hover:shadow-xl transition-all duration-300 ease-in-out cursor-pointer"
+              className={`relative ${INPUT_CONTAINER_BASE_CLASSES} w-96 px-4 ${INPUT_CONTAINER_HEIGHT} group`}
               onClick={handleInputClick}
             >
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                <span className="text-sm text-muted-foreground flex-1">Ask me anything...</span>
+              <div className={INPUT_CONTAINER_CONTENT_CLASSES}>
+                <img src="/breeze.png" alt="" className={INPUT_ICON_CLASSES} />
+                <span className={INPUT_TEXT_CLASSES}>Ask me anything...</span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -191,9 +198,9 @@ export function ChatWidget() {
                     e.stopPropagation();
                     setWidgetState('minimized');
                   }}
-                  className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                  className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                 >
-                  <Minus className="h-4 w-4" />
+                  <Minimize2 className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -401,10 +408,11 @@ export function ChatWidget() {
                     value="chat" 
                     className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-100 data-[state=active]:to-purple-100 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   >
+                    {/* <img src="/breeze.png" alt="" className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" /> */}
                     <MessageCircle className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
                     <span className="relative">
                       Chat
-                      <span className="absolute -top-1 -right-2 h-2 w-2 bg-blue-500 rounded-full animate-pulse data-[state=inactive]:opacity-0 transition-opacity" />
+                      {/* <span className="absolute -top-1 -right-2 h-2 w-2 bg-blue-500 rounded-full animate-pulse data-[state=inactive]:opacity-0 transition-opacity" /> */}
                     </span>
                   </TabsTrigger>
                   
@@ -412,7 +420,7 @@ export function ChatWidget() {
                     value="help" 
                     className="relative z-10 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-100 data-[state=active]:to-purple-100 data-[state=active]:text-purple-700 data-[state=active]:shadow-sm data-[state=inactive]:text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   >
-                    <BookOpen className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
+                    <HelpCircle className="h-4 w-4 transition-transform duration-300 data-[state=active]:scale-110" />
                     <span>Help</span>
                   </TabsTrigger>
                 </TabsList>
@@ -436,14 +444,14 @@ export function ChatWidget() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setWidgetState('tabbed')}
-                className="h-8 w-8 p-0 mr-2"
+                className="h-8 w-8 p-0"
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               {/* <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <MessageCircle className="h-4 w-4 text-white" />
               </div> */}
-              <span className="font-medium">Gigi</span>
+              <span className="font-medium">Digibot</span>
             </div>
             <Button
               variant="ghost"
@@ -466,10 +474,8 @@ export function ChatWidget() {
                 }`}>
                   {msg.type === 'ai' && (
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                        <MessageCircle className="h-3 w-3 text-white" />
-                      </div>
-                      <span className="text-sm font-medium">Gigi</span>
+                      <img src="/breeze.png" alt="" className="w-6 h-6" />
+                      <span className="text-sm font-medium">Digibot</span>
                     </div>
                   )}
                   <p className="text-sm">{msg.message}</p>
@@ -534,9 +540,7 @@ export function ChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <MessageCircle className="h-4 w-4 text-white" />
-              </div>
+              <img src="/breeze.png" alt="" className="w-8 h-8" />
               <span className="font-medium">Digital Marketing Assistant</span>
             </div>
             <Button
@@ -560,9 +564,7 @@ export function ChatWidget() {
                 }`}>
                   {msg.type === 'ai' && (
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                        <MessageCircle className="h-3 w-3 text-white" />
-                      </div>
+                      <img src="/breeze.png" alt="" className="w-6 h-6" />
                       <span className="text-sm font-medium">Assistant</span>
                     </div>
                   )}
